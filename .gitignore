@@ -61,6 +61,9 @@ Thumbs.db
 
 # ignore node/grunt dependency directories
 node_modules/
+/workspaces/BernardoNurvia-react-flask-hello/migrations
+migrations
+
 
 # webpack output
 dist/*
