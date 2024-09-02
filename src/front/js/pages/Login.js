@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("https://supreme-space-broccoli-4jq55x7xpj9qhq6wj-3000.app.github.dev/login", {
+    fetch(process.env.BACKEND_URL +"/login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ const Login = () => {
       .then(data => console.log('Success:', data))
       .catch(error => console.error('Error:', error));
   };
-
+  localStorage.setItem("jwt-token", data.token);
   return (
     <div className="container">
       <h2>Login</h2>
