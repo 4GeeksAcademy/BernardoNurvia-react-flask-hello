@@ -86,13 +86,13 @@ def serve_any_other_file(path):
 @app.route('/login', methods=['POST'])
 def login():
     body = request.get_json(silent=True)
-    if body is None:
-       return jsonify({'msg':'Debes enviarlos siguentes campos:',
-                       'campos':{
-                           'username':'requerido',
-                           'email':'requerido',
-                           'pasword':'requerido'
-                       }}), 404
+    # if body is None:
+    #    return jsonify({'msg':'Debes enviarlos siguentes campos:',
+    #                    'campos':{
+    #                        'username':'requerido',
+    #                        'email':'requerido',
+    #                        'pasword':'requerido'
+    #                    }}), 400
     if 'username' not in body:
        return jsonify({'msg':'debes enviar el campo username'}), 400
     if 'email' not in body:
@@ -101,9 +101,14 @@ def login():
        return jsonify({'msg':'debes enviar el campo password'}), 400
     user = User.query.filter_by(username= body['username']).first()
     if user is None:
-       return jsonify({'msg':'Usuario, email o contraseña incorrecta'}), 400
+       return jsonify({'msg':'Debes enviarlos siguentes campos:',
+                        'campos':{
+                            'username':'requerido',
+                            'email':'requerido',
+                            'pasword':'requerido'
+                        }}), 400
     password_db =  bcrypt.check_password_hash(user.password, body['password'])
-    if password_db is False:
+    if not password_db:
        return jsonify({'msg':'Usuario, email o contraseña incorrecta'}), 400
     if user.email != body['email']:
        return jsonify({'msg':'Usuario, email o contraseña incorrecta'}), 400

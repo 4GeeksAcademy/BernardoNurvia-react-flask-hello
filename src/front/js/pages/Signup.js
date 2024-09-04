@@ -47,6 +47,7 @@ const Signup = () => {
             onChange={handleInputChange}
             aria-label="username"
             aria-describedby="basic-addon1"
+            required
           />
         </div>
         <div className="input-group mb-3">
@@ -60,6 +61,7 @@ const Signup = () => {
             onChange={handleInputChange}
             aria-label="email"
             aria-describedby="basic-addon2"
+            required
           />
         </div>
         <div className="input-group mb-3">
@@ -73,10 +75,13 @@ const Signup = () => {
             onChange={handleInputChange}
             aria-label="password"
             aria-describedby="basic-addon2"
+            required
           />
         </div>
         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button className="btn btn-success" type="submit">Submit</button>
+         <Link to="/">
+          <button className="btn btn-success"  type="submit">Submit</button>
+          </Link>
           <Link to="/">
             <button className="btn btn-danger" type="button">Cancel</button>
           </Link>

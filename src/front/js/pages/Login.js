@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 const Login = () => {
@@ -17,9 +17,10 @@ const Login = () => {
       [name]: value
     });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+    
     fetch(process.env.BACKEND_URL +"/login", {
       method: 'POST',
       headers: {
@@ -28,10 +29,16 @@ const Login = () => {
       body: JSON.stringify(formData)
     })
       .then(response => response.json())
-      .then(data => console.log('Success:', data))
+      .then(data => {
+        console.log('Success:', data);
+        if (data.Msg === "Todos los datos estan ok"){
+          navigate("/");
+          localStorage.setItem("jwt-token", data.token);
+        }else alert('Usuario, email o contraseña incorrecta')
+        })
       .catch(error => console.error('Error:', error));
   };
-  localStorage.setItem("jwt-token", data.token);
+
   return (
     <div className="container">
       <h2>Login</h2>
@@ -47,6 +54,7 @@ const Login = () => {
             onChange={handleInputChange}
             aria-label="username"
             aria-describedby="basic-addon1"
+            required
           />
         </div>
         <div className="input-group mb-3">
@@ -60,6 +68,7 @@ const Login = () => {
             onChange={handleInputChange}
             aria-label="email"
             aria-describedby="basic-addon2"
+            required
           />
         </div>
         <div className="input-group mb-3">
@@ -73,6 +82,7 @@ const Login = () => {
             onChange={handleInputChange}
             aria-label="password"
             aria-describedby="basic-addon2"
+            required
           />
         </div>
         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
