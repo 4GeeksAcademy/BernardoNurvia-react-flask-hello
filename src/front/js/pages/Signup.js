@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+
 const Signup = () => {
   const { store, actions } = useContext(Context);
   const [formData, setFormData] = useState({
@@ -8,7 +9,6 @@ const Signup = () => {
     password: '',
     email: ''
   });
-
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -17,9 +17,10 @@ const Signup = () => {
       [name]: value
     });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+
     fetch(process.env.BACKEND_URL +"/signup", {
       method: 'POST',
       headers: {
@@ -28,7 +29,13 @@ const Signup = () => {
       body: JSON.stringify(formData)
     })
       .then(response => response.json())
-      .then(data => console.log('Success:', data))
+      .then(data => {
+        console.log('Success:', data);
+        if (data.Msg === "Tu usuario a sido creado!"){
+          navigate("/");
+          localStorage.setItem("jwt-token", data.token);
+        }else alert('Usuario, email o contraseña incorrecta')
+        })
       .catch(error => console.error('Error:', error));
   };
 
@@ -79,9 +86,9 @@ const Signup = () => {
           />
         </div>
         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-         <Link to="/">
+         
           <button className="btn btn-success"  type="submit">Submit</button>
-          </Link>
+         
           <Link to="/">
             <button className="btn btn-danger" type="button">Cancel</button>
           </Link>

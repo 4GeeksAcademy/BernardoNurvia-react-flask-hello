@@ -9,7 +9,7 @@ const Login = () => {
     password: '',
     email: ''
   });
-
+  
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -17,6 +17,7 @@ const Login = () => {
       [name]: value
     });
   };
+  
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();

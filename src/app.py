@@ -86,13 +86,6 @@ def serve_any_other_file(path):
 @app.route('/login', methods=['POST'])
 def login():
     body = request.get_json(silent=True)
-    # if body is None:
-    #    return jsonify({'msg':'Debes enviarlos siguentes campos:',
-    #                    'campos':{
-    #                        'username':'requerido',
-    #                        'email':'requerido',
-    #                        'pasword':'requerido'
-    #                    }}), 400
     if 'username' not in body:
        return jsonify({'msg':'debes enviar el campo username'}), 400
     if 'email' not in body:
@@ -144,7 +137,11 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'msg':'Tu usuario a sido creado!'}), 201
+    access_token = create_access_token(identity= new_user.username)
+    return jsonify({
+       'Msg':'Tu usuario a sido creado!',
+       'jwt_token': access_token
+        }), 201
 
 @app.route('/private', methods=['GET'])
 @jwt_required()
