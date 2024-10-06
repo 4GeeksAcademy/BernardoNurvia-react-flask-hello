@@ -6,11 +6,22 @@ export const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const LoginIni = localStorage.getItem("jwt-token");
-        if (LoginIni) {
-            setIsAuthenticated(true);
-        }
-    }, []);
+        const checkAuth = () => {
+            const token = localStorage.getItem("jwt-token");
+            setIsAuthenticated(!!token);
+        };
+        
+        // Verifica el token al cargar el componente
+        checkAuth();
+
+        // Escucha cambios en el localStorage
+        window.addEventListener("storage", checkAuth);
+
+        // Limpia el evento al desmontar el componente
+        return () => {
+            window.removeEventListener("storage", checkAuth);
+        };
+    }, [localStorage]);
 
     const handleLogout = () => {
         localStorage.removeItem("jwt-token");
@@ -27,9 +38,7 @@ export const Navbar = () => {
                 <div className="ml-auto d-grid gap-2 d-md-flex justify-content-md-end">
                     {isAuthenticated ? (
                         <>
-                            <Link to="/private">
-                                <button className="btn btn-info">Private</button>
-                            </Link>
+                          
                             <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                         </>
                     ) : (

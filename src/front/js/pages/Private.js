@@ -1,10 +1,24 @@
-import React from 'react';
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Private = () => {
-  return (
-    <div>Private</div>
-  )
-}
+  const navigate = useNavigate();
+  const auth = localStorage.getItem('jwt-token');
 
-export default Private
+  useEffect(() => {
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [auth, navigate]);
+
+  return (
+    auth && (
+      <div>
+        <h1>Aqui solo los invitados</h1>
+        <img src="https://img.freepik.com/fotos-premium/mono-fumando-cigarrillo-traje-corbata_727939-2011.jpg" style={{ width: "400px", marginLeft: "auto" }} />
+      </div>
+    )
+  );
+};
+
+export default Private;

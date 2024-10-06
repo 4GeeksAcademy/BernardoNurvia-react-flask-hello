@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     
-    fetch(process.env.BACKEND_URL +"/login", {
+    fetch(process.env.BACKEND_URL + "/login", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -32,11 +32,14 @@ const Login = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
-        if (data.Msg === "Todos los datos estan ok"){
-          navigate("/");
+        if (data.Msg === "Todos los datos estan ok") {
           localStorage.setItem("jwt-token", data.token);
-        }else alert('Usuario, email o contraseña incorrecta')
-        })
+          localStorage.setItem("username", data.username);
+          navigate("/private");
+        } else {
+          alert('Usuario, email o contraseña incorrecta');
+        }
+      })
       .catch(error => console.error('Error:', error));
   };
 
